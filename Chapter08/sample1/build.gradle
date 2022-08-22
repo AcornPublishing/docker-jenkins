@@ -1,0 +1,49 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.1'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'jacoco'
+	id 'checkstyle'
+}
+
+group = 'com.leszko'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.hazelcast:hazelcast:5.0.2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'junit:junit:4.13'
+	testImplementation("io.cucumber:cucumber-java:7.2.0") 
+	testImplementation("io.cucumber:cucumber-junit:7.2.0")
+}
+
+tasks.register('acceptanceTest', Test) { 
+	include '**/acceptance/**' 
+	systemProperties System.getProperties() 
+} 
+
+tasks.register('smokeTest', Test) { 
+	include '**/smoke/**' 
+	systemProperties System.getProperties() 
+} 
+
+test { 
+	exclude '**/acceptance/**'
+	exclude '**/smoke/**'
+}    
+
+jacocoTestCoverageVerification {
+     violationRules { 
+          rule { 
+               limit { 
+                    minimum = 0.2 
+               } 
+          } 
+     } 
+} 
